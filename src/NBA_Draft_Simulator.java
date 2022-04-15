@@ -5,9 +5,9 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class NBA_Draft_Simulator {
-    private static ArrayList<Integer> allTickets;
-    private static ArrayList<Integer> empty;
-    private static ArrayList<ArrayList<Integer>> teamsTickets;
+    private static ArrayList<String> allTickets;
+    private static ArrayList<String> empty;
+    private static ArrayList<ArrayList<String>> teamsTickets;
     private static String[] worstTeams;
     private static String[] AworstTeams;
     private static ArrayList<String> lotteryLosers;
@@ -20,22 +20,28 @@ public class NBA_Draft_Simulator {
             worstTeams[lines] = file.nextLine();
             lines++;
         }
-        allTickets = new ArrayList<Integer>();
+        allTickets = new ArrayList<String>();
         empty = new ArrayList();
-        teamsTickets = new ArrayList<ArrayList<Integer>>();
+        teamsTickets = new ArrayList<ArrayList<String>>();
         AworstTeams = Arrays.copyOf(worstTeams,worstTeams.length);
         lotteryLosers = new ArrayList<String>();
         printAllWinners();
     }
     public static void assignTickets() {
-        for(int i = 1; i<=1000;i++){
-            allTickets.add(i);
+        for(int i = 1; i<=14;i++){
+            for(int j = 1; j<=14;j++){
+                for(int k = 1; k<=14;k++) {
+                    for (int l = 1; l <= 14; l++) {
+                        allTickets.add(i + " " + j + " " + k + " " + l);
+                    }
+                }
+            }
         }
 
         for(int j = 0; j<=13;j++) {
-            teamsTickets.add(new ArrayList<Integer>());
+            teamsTickets.add(new ArrayList<String>());
         }
-        while (allTickets.size() > 0){
+        while (allTickets.size() > 37416){
             int whichTicketIndex = (int) (Math.random()*allTickets.size());
             int whichTeamIndex =  (int) (Math.random()*teamsTickets.size());
             if ( !((whichTeamIndex == 0 && teamsTickets.get(whichTeamIndex).size() > 139) || (whichTeamIndex == 1 && teamsTickets.get(whichTeamIndex).size() > 139) || (whichTeamIndex == 2 && teamsTickets.get(whichTeamIndex).size() > 139) || (whichTeamIndex == 3 && teamsTickets.get(whichTeamIndex).size() > 124) || (whichTeamIndex == 4 && teamsTickets.get(whichTeamIndex).size() > 104)||(whichTeamIndex == 5 && teamsTickets.get(whichTeamIndex).size() > 89)|| (whichTeamIndex == 6 && teamsTickets.get(whichTeamIndex).size() > 74)||(whichTeamIndex == 7 && teamsTickets.get(whichTeamIndex).size() > 59)||(whichTeamIndex == 8 && teamsTickets.get(whichTeamIndex).size() > 44)||(whichTeamIndex == 9 && teamsTickets.get(whichTeamIndex).size() > 29)||(whichTeamIndex == 10 && teamsTickets.get(whichTeamIndex).size() > 19)||(whichTeamIndex == 11 && teamsTickets.get(whichTeamIndex).size() > 14)||(whichTeamIndex == 12 && teamsTickets.get(whichTeamIndex).size() > 9)||(whichTeamIndex == 13 && teamsTickets.get(whichTeamIndex).size() > 4))) {
@@ -45,15 +51,13 @@ public class NBA_Draft_Simulator {
         }
     }
     public static String findLotteryWinners(){
-
-
         int indexOfWinner = -1;
         boolean winnerFound = false;
         while (!winnerFound) {
-            int winner = (int) (Math.random() * 1000 + 1);
+            String winner = (int) (Math.random() * 13 + 1) + " " + (int) (Math.random() * 13 + 1) + " " + (int) (Math.random() * 13 + 1) + " " + (int) (Math.random() * 13 + 1);
             for (int i = 0; i < teamsTickets.size(); i++) {
                 for (int j = 0; j < teamsTickets.get(i).size(); j++) {
-                    if (teamsTickets.get(i).get(j) == winner) {
+                    if (teamsTickets.get(i).get(j).equals(winner)) {
                         indexOfWinner = i;
                         winnerFound = true;
                         break;
@@ -88,6 +92,7 @@ public class NBA_Draft_Simulator {
     }
     public static void printAllWinners(){
         assignTickets();
+        System.out.println(teamsTickets);
         System.out.println("Welcome to the lottery in the NBA 2022 Draft" + "\n");
         System.out.println("Pick number 1 goes to the " + findLotteryWinners());
         System.out.println("Pick number 2 goes to the " + findLotteryWinners());
