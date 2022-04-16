@@ -1,7 +1,6 @@
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-
 public class NBA_Draft_Simulator {
     private static ArrayList<String> allTickets;
     private static ArrayList<String> empty;
@@ -13,21 +12,34 @@ public class NBA_Draft_Simulator {
     private static double secondsToSleep2;
 
     public static void main(String args[]) throws IOException {
-        worstTeams = new String[]{"Houston Rockets", "Orlando Magic", "Detroit Pistons", "Oklahoma City Thunder", "Indiana Pacers", "Portland Trail Blazers", "Sacramento Kings", "Los Angeles Lakers", "San Antonio Spurs", "Washington Wizards", "New York Knicks", "New Orleans Pelicans", "LA Clippers", "Charlotte Hornets"};
-        Scanner file = new Scanner(new File("input.txt"));
-        int lines = 0;
-        while(file.hasNextLine()) {
-            worstTeams[lines] = file.nextLine();
-            lines++;
-        }
-        allTickets = new ArrayList<String>();
-        empty = new ArrayList();
-        teamsTickets = new ArrayList<ArrayList<String>>();
-        AworstTeams = Arrays.copyOf(worstTeams,worstTeams.length);
-        lotteryLosers = new ArrayList<String>();
-        secondsToSleep = 1;
-        secondsToSleep2 = 500;
-        printAllWinners();
+        boolean goAgain = false;
+        do{
+            worstTeams = new String[]{"Houston Rockets", "Orlando Magic", "Detroit Pistons", "Oklahoma City Thunder", "Indiana Pacers", "Portland Trail Blazers", "Sacramento Kings", "Los Angeles Lakers", "San Antonio Spurs", "Washington Wizards", "New York Knicks", "New Orleans Pelicans", "LA Clippers", "Charlotte Hornets"};
+            Scanner file = new Scanner(new File("input.txt"));
+            int lines = 0;
+            while (file.hasNextLine()) {
+                worstTeams[lines] = file.nextLine();
+                lines++;
+            }
+            allTickets = new ArrayList<String>();
+            empty = new ArrayList();
+            teamsTickets = new ArrayList<ArrayList<String>>();
+            AworstTeams = Arrays.copyOf(worstTeams, worstTeams.length);
+            lotteryLosers = new ArrayList<String>();
+            secondsToSleep = 1;
+            secondsToSleep2 = 500;
+            printAllWinners();
+            Scanner keyboard = new Scanner(System.in);
+            System.out.println("\n\nTo see each teams tickets look at the teamsTickets.txt file");
+            System.out.println("To run a new simulation type \"sim\" :: ");
+            if (keyboard.nextLine().equals("sim")) {
+                goAgain = true;
+            }
+            else{
+                System.out.println("Thank you for trying the NBA 2022 Draft Simulator!");
+            }
+        } while (goAgain);
+
     }
     public static void assignTickets() {
         for(int i = 1; i<=14;i++){
