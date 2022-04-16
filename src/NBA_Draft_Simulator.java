@@ -1,8 +1,6 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.io.File;
-import java.io.IOException;
-import java.util.Scanner;
+import java.io.*;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class NBA_Draft_Simulator {
     private static ArrayList<String> allTickets;
@@ -11,6 +9,8 @@ public class NBA_Draft_Simulator {
     private static String[] worstTeams;
     private static String[] AworstTeams;
     private static ArrayList<String> lotteryLosers;
+    private static double secondsToSleep;
+    private static double secondsToSleep2;
 
     public static void main(String args[]) throws IOException {
         worstTeams = new String[]{"Houston Rockets", "Orlando Magic", "Detroit Pistons", "Oklahoma City Thunder", "Indiana Pacers", "Portland Trail Blazers", "Sacramento Kings", "Los Angeles Lakers", "San Antonio Spurs", "Washington Wizards", "New York Knicks", "New Orleans Pelicans", "LA Clippers", "Charlotte Hornets"};
@@ -25,6 +25,8 @@ public class NBA_Draft_Simulator {
         teamsTickets = new ArrayList<ArrayList<String>>();
         AworstTeams = Arrays.copyOf(worstTeams,worstTeams.length);
         lotteryLosers = new ArrayList<String>();
+        secondsToSleep = 1;
+        secondsToSleep2 = 500;
         printAllWinners();
     }
     public static void assignTickets() {
@@ -60,6 +62,17 @@ public class NBA_Draft_Simulator {
                     if (teamsTickets.get(i).get(j).equals(winner)) {
                         indexOfWinner = i;
                         winnerFound = true;
+                        int indexOfFirstSpace = winner.indexOf(" ");
+                        int indexOfSecondSpace = winner.substring(indexOfFirstSpace+1).indexOf(" ") + indexOfFirstSpace+1;
+                        int indexOfThirdSpace = winner.substring(indexOfSecondSpace+1).indexOf(" ") + indexOfSecondSpace+1;
+                        int indexOfFourthSpace = winner.substring(indexOfThirdSpace+1).indexOf(" ") + indexOfThirdSpace+1;
+                        System.out.println("The first number is " + winner.substring(0,indexOfFirstSpace) + "!");
+                        System.out.println("These teams could still win! - " + findPossibleWinners(winner.substring(0,indexOfFirstSpace),1));
+                        System.out.println("The second number is " + winner.substring(indexOfFirstSpace+1,indexOfSecondSpace) + "!");
+                        System.out.println("These teams could still win! - " + findPossibleWinners(winner.substring(0,indexOfSecondSpace),2));
+                        System.out.println("The third number is " + winner.substring(indexOfSecondSpace+1,indexOfThirdSpace) + "!");
+                        System.out.println("These teams could still win! - " + findPossibleWinners(winner.substring(0,indexOfThirdSpace),3));
+                        System.out.println("The fourth number is " + winner.substring(indexOfFourthSpace+1) + "!");
                         break;
                     }
                 }
@@ -90,9 +103,9 @@ public class NBA_Draft_Simulator {
             }
         }
     }
-    public static void printAllWinners(){
+    public static void printAllWinners() throws FileNotFoundException {
         assignTickets();
-        System.out.println(teamsTickets);
+        writeTeamsTicketsFile();
         System.out.println("Welcome to the lottery in the NBA 2022 Draft" + "\n");
         System.out.println("Pick number 1 goes to the " + findLotteryWinners());
         System.out.println("Pick number 2 goes to the " + findLotteryWinners());
@@ -100,15 +113,142 @@ public class NBA_Draft_Simulator {
         System.out.println("Pick number 4 goes to the " + findLotteryWinners());
         findOtherWinners();
         System.out.println("Pick number 5 goes to the " + lotteryLosers.get(0));
+        try {
+            TimeUnit.MILLISECONDS.sleep((long) secondsToSleep2);
+        } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
+        }
         System.out.println("Pick number 6 goes to the " + lotteryLosers.get(1));
+        try {
+            TimeUnit.MILLISECONDS.sleep((long) secondsToSleep2);
+        } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
+        }
         System.out.println("Pick number 7 goes to the " + lotteryLosers.get(2));
+        try {
+            TimeUnit.MILLISECONDS.sleep((long) secondsToSleep2);
+        } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
+        }
         System.out.println("Pick number 8 goes to the " + lotteryLosers.get(3));
+        try {
+            TimeUnit.MILLISECONDS.sleep((long) secondsToSleep2);
+        } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
+        }
         System.out.println("Pick number 9 goes to the " + lotteryLosers.get(4));
+        try {
+            TimeUnit.MILLISECONDS.sleep((long) secondsToSleep2);
+        } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
+        }
         System.out.println("Pick number 10 goes to the " + lotteryLosers.get(5));
+        try {
+            TimeUnit.MILLISECONDS.sleep((long) secondsToSleep2);
+        } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
+        }
         System.out.println("Pick number 11 goes to the " + lotteryLosers.get(6));
+        try {
+            TimeUnit.MILLISECONDS.sleep((long) secondsToSleep2);
+        } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
+        }
         System.out.println("Pick number 12 goes to the " + lotteryLosers.get(7));
+        try {
+            TimeUnit.MILLISECONDS.sleep((long) secondsToSleep2);
+        } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
+        }
         System.out.println("Pick number 13 goes to the " + lotteryLosers.get(8));
+        try {
+            TimeUnit.MILLISECONDS.sleep((long) secondsToSleep2);
+        } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
+        }
         System.out.println("Pick number 14 goes to the " + lotteryLosers.get(9));
-        System.out.println( "\n" + "This concludes the lottery portion of the NBA 2022 draft");
+        try {
+            TimeUnit.MILLISECONDS.sleep((long) secondsToSleep2);
+        } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
+        }
+    }
+    public static ArrayList<String> findPossibleWinners(String ball, int whichTime){
+        ArrayList<String> possibleWinners = new ArrayList<String>();
+        for (int i = 0; i < teamsTickets.size(); i++) {
+            for (int j = 0; j < teamsTickets.get(i).size(); j++) {
+                String str = teamsTickets.get(i).get(j); // 9 10 4 2
+                int spacesFound = 0;
+                String oneBall = "";
+                String twoBalls = "";
+                String threeBalls = "";
+                for (int k = str.length()-1; k>0;k--){
+                    if (str.substring(k-1,k).equals(" ")){
+                        if (spacesFound == 0){
+                            threeBalls = str.substring(0,k-1);
+                        }
+                        if (spacesFound == 1){
+                            twoBalls = str.substring(0,k-1);
+                        }
+                        if (spacesFound == 2){
+                            oneBall = str.substring(0,k-1);
+                        }
+                        spacesFound++;
+                    }
+                }
+                if (whichTime == 1 && oneBall.equals(ball)){
+                    possibleWinners.add(worstTeams[i]);
+                }
+                if (whichTime == 2 && twoBalls.equals(ball)){
+                    possibleWinners.add(worstTeams[i]);
+                }
+                if (whichTime == 3 && threeBalls.equals(ball)){
+                    possibleWinners.add(worstTeams[i]);
+                }
+            }
+        }
+        try {
+            TimeUnit.SECONDS.sleep((long) secondsToSleep);
+        } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
+        }
+        Set<String> set = new HashSet<String>();
+        for (String team : possibleWinners) {
+            set.add(team);
+        }
+        for (int j = possibleWinners.size()-1; j >= 0; j--) {
+            possibleWinners.remove(j);
+        }
+        possibleWinners.addAll(set);
+        return possibleWinners;
+    }
+    public static void writeTeamsTicketsFile() throws FileNotFoundException{
+        String filePath = "C:\\Users\\lahiv\\Github repos\\NBA Draft Simulator\\teamsTickets.txt";
+        // Content that will be written in the file
+        PrintWriter writer = new PrintWriter(filePath);
+        writer.print("");
+        writer.close();
+
+        List<String> lines = Arrays.asList(worstTeams[0] + " - " + teamsTickets.get(0),worstTeams[1] + " - "+teamsTickets.get(1),worstTeams[2] + " - "+teamsTickets.get(2), worstTeams[3] + " - "+teamsTickets.get(3), worstTeams[4] + " - "+teamsTickets.get(4), worstTeams[5] + " - "+teamsTickets.get(5), worstTeams[6] + " - "+teamsTickets.get(6), worstTeams[7] + " - "+teamsTickets.get(7), worstTeams[8] + " - "+teamsTickets.get(8), worstTeams[9] + " - "+teamsTickets.get(9), worstTeams[10] + " - "+teamsTickets.get(10), worstTeams[11] + " - "+teamsTickets.get(11), worstTeams[12] + " - "+teamsTickets.get(12), worstTeams[13] + " - "+teamsTickets.get(13));
+        PrintWriter printWriter = null;
+        try {
+            Writer fileWriter = new FileWriter(filePath, true);
+            printWriter = new PrintWriter(fileWriter);
+
+            for (String line : lines) {
+                printWriter.write(line);
+                printWriter.write(System.getProperty("line.separator"));//The two above lines can be replaced with : printWriter.println(line);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        finally {
+            // Closing the file
+            if (printWriter != null) {
+                printWriter.close();
+            }
+        }
     }
 }
