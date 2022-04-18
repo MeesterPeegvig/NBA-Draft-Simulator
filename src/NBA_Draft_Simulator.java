@@ -61,9 +61,23 @@ public class NBA_Draft_Simulator {
             }
         }
 // change order of each number here
+        Random rand = new Random();
+        for (int i = 0; i<allTickets.size();i++){
+            String newTicket = "";
+            String[] ticketInArray = new String[]{};
+            ticketInArray = allTickets.get(i).split(" ");
+            for (int j = 0; j < ticketInArray.length; j++) {
+                int index = rand.nextInt(ticketInArray.length - j);
+                String tmp = ticketInArray[ticketInArray.length - 1 - j];
+                ticketInArray[ticketInArray.length - 1 - j] = ticketInArray[index];
+                ticketInArray[index] = tmp;
+            }
+            for(int k = 0; k < ticketInArray.length; k++){
+                newTicket += ticketInArray[k] + " ";
+            }
+            allTickets.set(i, newTicket.strip());
 
-
-
+        }
         for(int j = 0; j<=13;j++) {
             teamsTickets.add(new ArrayList<>());
         }
