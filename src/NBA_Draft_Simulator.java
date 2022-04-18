@@ -13,6 +13,7 @@ public class NBA_Draft_Simulator {
     private static double secondsToSleep2;
     private static boolean goFast;
     private static String isFast;
+
     public static void main(String args[]) throws IOException {
         boolean goAgain = false;
         do{
@@ -44,9 +45,6 @@ public class NBA_Draft_Simulator {
             }
         } while (goAgain);
 
-    }
-    public static String[] swap(String a, String b) {
-        return new String[]{b,a};
     }
     public static void assignTickets() {
         for(int i = 1; i<=14;i++){
@@ -91,6 +89,38 @@ public class NBA_Draft_Simulator {
             }
         }
     }
+    public static int[] quick_sort(int intArray[], int low, int high) {
+        if (low < high) {
+            //partition the array around pi=>partitioning index and return pi
+            int pi = partition(intArray, low, high);
+
+            // sort each partition recursively
+            quick_sort(intArray, low, pi-1);
+            quick_sort(intArray, pi+1, high);
+        }
+        return intArray;
+    }
+    public static int partition(int intArray[], int low, int high) {
+        int pi = intArray[high];
+        int i = (low-1); // smaller element index
+        for (int j=low; j<high; j++) {
+            // check if current element is less than or equal to pi
+            if (intArray[j] <= pi) {
+                i++;
+                // swap intArray[i] and intArray[j]
+                int temp = intArray[i];
+                intArray[i] = intArray[j];
+                intArray[j] = temp;
+            }
+        }
+
+        // swap intArray[i+1] and intArray[high] (or pi)
+        int temp = intArray[i+1];
+        intArray[i+1] = intArray[high];
+        intArray[high] = temp;
+
+        return i+1;
+    }
     public static String findLotteryWinners(){
         int indexOfWinner = -1;
         boolean winnerFound = false;
@@ -99,7 +129,21 @@ public class NBA_Draft_Simulator {
             String winner = (int) (Math.random() * 13 + 1) + " " + (int) (Math.random() * 13 + 1) + " " + (int) (Math.random() * 13 + 1) + " " + (int) (Math.random() * 13 + 1);
             for (int i = 0; i < teamsTickets.size(); i++) {
                 for (int j = 0; j < teamsTickets.get(i).size(); j++) {
-                    if (teamsTickets.get(i).get(j).equals(winner)) {
+                    String[] winnerArray = new String[4];
+                    int[] intWinnerArray = new int[4];
+                    winnerArray = winner.split(" ");
+                    for(int k = 0; k<winnerArray.length;k++){
+                        intWinnerArray[k] = Integer.parseInt(winnerArray[k]);
+                    }
+                    String[] teamsTicketsArray = new String[4];
+                    int[] intTeamsTicketsArray = new int[4];
+                    teamsTicketsArray = teamsTickets.get(i).get(j).split(" ");
+                    for(int l = 0; l<teamsTicketsArray.length;l++){
+                        intTeamsTicketsArray[l] = Integer.parseInt(teamsTicketsArray[l]);
+                    }
+                    int[] sortedTeamsTicket = quick_sort(intTeamsTicketsArray,0,intTeamsTicketsArray.length-1);
+                    int[] sortedWinner = quick_sort(intWinnerArray, 0, intWinnerArray.length-1);
+                    if (Arrays.equals(sortedTeamsTicket,sortedWinner)) {
                         indexOfWinner = i;
                         winnerFound = true;
                         int indexOfFirstSpace = winner.indexOf(" ");
@@ -109,15 +153,15 @@ public class NBA_Draft_Simulator {
                         if (!goFast) isFast = keyboard.nextLine();
                         if (!goFast && isFast.equals("fast")) goFast = true;
                         System.out.println("The first number is " + winner.substring(0,indexOfFirstSpace) + "!");
-                        System.out.println("These teams could still win! - " + findPossibleWinners(winner.substring(0,indexOfFirstSpace),1));
+                        System.out.println("These " + findPossibleWinners(Arrays.copyOfRange(sortedWinner,0,1),1).size() + " teams could still win! - " + findPossibleWinners(Arrays.copyOfRange(sortedWinner,0,1),1));
                         if (!goFast) isFast = keyboard.nextLine();
                         if (!goFast && isFast.equals("fast")) goFast = true;
                         System.out.println("The second number is " + winner.substring(indexOfFirstSpace+1,indexOfSecondSpace) + "!");
-                        System.out.println("These teams could still win! - " + findPossibleWinners(winner.substring(0,indexOfSecondSpace),2));
+                        System.out.println("These " + findPossibleWinners(Arrays.copyOfRange(sortedWinner,0,2),2).size() + " teams could still win! - " + findPossibleWinners(Arrays.copyOfRange(sortedWinner,0,2),2));
                         if (!goFast) isFast = keyboard.nextLine();
                         if (!goFast && isFast.equals("fast")) goFast = true;
                         System.out.println("The third number is " + winner.substring(indexOfSecondSpace+1,indexOfThirdSpace) + "!");
-                        System.out.println("These teams could still win! - " + findPossibleWinners(winner.substring(0,indexOfThirdSpace),3));
+                        System.out.println("These " + findPossibleWinners(Arrays.copyOfRange(sortedWinner,0,3),3).size() + " teams could still win! - " + findPossibleWinners(Arrays.copyOfRange(sortedWinner,0,3),3));
                         if (!goFast) isFast = keyboard.nextLine();
                         if (!goFast && isFast.equals("fast")) goFast = true;
                         System.out.println("The fourth number is " + winner.substring(indexOfFourthSpace+1) + "!");
@@ -198,37 +242,49 @@ public class NBA_Draft_Simulator {
         if (!goFast) isFast = keyboard.nextLine();
         if (!goFast && isFast.equals("fast")) goFast = true;
     }
-    public static ArrayList<String> findPossibleWinners(String ball, int whichTime){
+    public static ArrayList<String> findPossibleWinners(int[] balls, int whichTime){
         ArrayList<String> possibleWinners = new ArrayList<>();
         for (int i = 0; i < teamsTickets.size(); i++) {
             for (int j = 0; j < teamsTickets.get(i).size(); j++) {
-                String str = teamsTickets.get(i).get(j); // 9 10 4 2
-                int spacesFound = 0;
-                String oneBall = "";
-                String twoBalls = "";
-                String threeBalls = "";
-                for (int k = str.length()-1; k>0;k--){
-                    if (str.substring(k-1,k).equals(" ")){
-                        if (spacesFound == 0){
-                            threeBalls = str.substring(0,k-1);
+                String str = teamsTickets.get(i).get(j);
+                int[] oneBallofTicketArray = new int[1];
+                int[] twoBallofTicketArray = new int[2];
+                int[] threeBallofTicketArray = new int[3];
+                String[] sortedTicket = new String[4];
+                int[] intSortedTicket = new int[4];
+                sortedTicket = str.split(" ");
+                for (int o = 0; o < sortedTicket.length; o++){
+                    intSortedTicket[o] = Integer.parseInt(sortedTicket[o]);
+                } // sooo {2,10,11} for {2,9,10,11} is possible winner, so make it like that smh
+                intSortedTicket = quick_sort(intSortedTicket,0,intSortedTicket.length-1);
+                oneBallofTicketArray = Arrays.copyOfRange(intSortedTicket,0,1);
+                twoBallofTicketArray = Arrays.copyOfRange(intSortedTicket,0,2);
+                threeBallofTicketArray = Arrays.copyOfRange(intSortedTicket,0,3);
+                int twocount = 0;
+                int threecount = 0;
+                if (whichTime == 1){
+                    for (int ball : balls){
+                        for (int ticket : oneBallofTicketArray){
+                            if (ball==ticket) possibleWinners.add(worstTeams[i]);
                         }
-                        if (spacesFound == 1){
-                            twoBalls = str.substring(0,k-1);
-                        }
-                        if (spacesFound == 2){
-                            oneBall = str.substring(0,k-1);
-                        }
-                        spacesFound++;
                     }
                 }
-                if (whichTime == 1 && oneBall.equals(ball)){
-                    possibleWinners.add(worstTeams[i]);
+                if (whichTime == 2){
+                    for (int ball : balls){
+                        for (int ticket : twoBallofTicketArray){
+                            if (ball==ticket) twocount++;
+                        }
+                    }
+                    if (twocount>=2) possibleWinners.add(worstTeams[i]);
                 }
-                if (whichTime == 2 && twoBalls.equals(ball)){
-                    possibleWinners.add(worstTeams[i]);
-                }
-                if (whichTime == 3 && threeBalls.equals(ball)){
-                    possibleWinners.add(worstTeams[i]);
+                if (whichTime == 3){
+                    for (int ball : balls){
+                        for (int ticket : threeBallofTicketArray){
+                            if (ball==ticket) threecount++;
+
+                        }
+                    }
+                    if (threecount>=3) possibleWinners.add(worstTeams[i]);
                 }
             }
         }
