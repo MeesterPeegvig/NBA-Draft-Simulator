@@ -1,7 +1,6 @@
 import java.io.*;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
-// write burnt in file, ORDER DOESNT MATTER even when checking who won
+// separate logic and prints,
 public class NBA_Draft_Simulator {
     private static ArrayList<String> allTickets;
     private static ArrayList<String> empty;
@@ -9,6 +8,8 @@ public class NBA_Draft_Simulator {
     private static String[] worstTeams;
     private static String[] AworstTeams;
     private static ArrayList<String> lotteryLosers;
+    private static ArrayList<String> winners;
+    private static int[] amountTickets;
     private static double secondsToSleep;
     private static double secondsToSleep2;
     private static boolean goFast;
@@ -18,10 +19,12 @@ public class NBA_Draft_Simulator {
         boolean goAgain = false;
         do{
             worstTeams = new String[]{"Houston Rockets", "Orlando Magic", "Detroit Pistons", "Oklahoma City Thunder", "Indiana Pacers", "Portland Trail Blazers", "Sacramento Kings", "Los Angeles Lakers", "San Antonio Spurs", "Washington Wizards", "New York Knicks", "New Orleans Pelicans", "LA Clippers", "Charlotte Hornets"};
+            amountTickets = new int[]{140,140,140,115,115,90,75,45,45,45,18,17,10,5};
             Scanner file = new Scanner(new File("input.txt"));
             int lines = 0;
             while (file.hasNextLine()) {
                 worstTeams[lines] = file.nextLine();
+                amountTickets[lines] = Integer.parseInt(file.nextLine());
                 lines++;
             }
             allTickets = new ArrayList<>();
@@ -29,6 +32,7 @@ public class NBA_Draft_Simulator {
             teamsTickets = new ArrayList<ArrayList<String>>();
             AworstTeams = Arrays.copyOf(worstTeams, worstTeams.length);
             lotteryLosers = new ArrayList<>();
+            winners = new ArrayList<>();
             secondsToSleep = 1;
             secondsToSleep2 = 500;
             goFast = false;
@@ -83,7 +87,7 @@ public class NBA_Draft_Simulator {
         while (allTickets.size() > 1){
             int whichTicketIndex = (int) (Math.random()*allTickets.size());
             int whichTeamIndex =  (int) (Math.random()*teamsTickets.size());
-            if ( !((whichTeamIndex == 0 && teamsTickets.get(whichTeamIndex).size() > 139) || (whichTeamIndex == 1 && teamsTickets.get(whichTeamIndex).size() > 139) || (whichTeamIndex == 2 && teamsTickets.get(whichTeamIndex).size() > 139) || (whichTeamIndex == 3 && teamsTickets.get(whichTeamIndex).size() > 124) || (whichTeamIndex == 4 && teamsTickets.get(whichTeamIndex).size() > 104)||(whichTeamIndex == 5 && teamsTickets.get(whichTeamIndex).size() > 89)|| (whichTeamIndex == 6 && teamsTickets.get(whichTeamIndex).size() > 74)||(whichTeamIndex == 7 && teamsTickets.get(whichTeamIndex).size() > 59)||(whichTeamIndex == 8 && teamsTickets.get(whichTeamIndex).size() > 44)||(whichTeamIndex == 9 && teamsTickets.get(whichTeamIndex).size() > 29)||(whichTeamIndex == 10 && teamsTickets.get(whichTeamIndex).size() > 19)||(whichTeamIndex == 11 && teamsTickets.get(whichTeamIndex).size() > 14)||(whichTeamIndex == 12 && teamsTickets.get(whichTeamIndex).size() > 9)||(whichTeamIndex == 13 && teamsTickets.get(whichTeamIndex).size() > 4))) {
+            if ( !((whichTeamIndex == 0 && teamsTickets.get(whichTeamIndex).size() > amountTickets[0]-1) || (whichTeamIndex == 1 && teamsTickets.get(whichTeamIndex).size() > amountTickets[1]-1) || (whichTeamIndex == 2 && teamsTickets.get(whichTeamIndex).size() > amountTickets[2]-1) || (whichTeamIndex == 3 && teamsTickets.get(whichTeamIndex).size() > amountTickets[3]-1) || (whichTeamIndex == 4 && teamsTickets.get(whichTeamIndex).size() > amountTickets[4]-1)||(whichTeamIndex == 5 && teamsTickets.get(whichTeamIndex).size() > amountTickets[5]-1)|| (whichTeamIndex == 6 && teamsTickets.get(whichTeamIndex).size() > amountTickets[6]-1)||(whichTeamIndex == 7 && teamsTickets.get(whichTeamIndex).size() > amountTickets[7]-1)||(whichTeamIndex == 8 && teamsTickets.get(whichTeamIndex).size() > amountTickets[8]-1)||(whichTeamIndex == 9 && teamsTickets.get(whichTeamIndex).size() > amountTickets[9]-1)||(whichTeamIndex == 10 && teamsTickets.get(whichTeamIndex).size() > amountTickets[10]-1)||(whichTeamIndex == 11 && teamsTickets.get(whichTeamIndex).size() > amountTickets[11]-1)||(whichTeamIndex == 12 && teamsTickets.get(whichTeamIndex).size() > amountTickets[12]-1)||(whichTeamIndex == 13 && teamsTickets.get(whichTeamIndex).size() > amountTickets[13]-1))) {
                 teamsTickets.get(whichTeamIndex).add(allTickets.get(whichTicketIndex));
                 allTickets.remove(whichTicketIndex);
             }
@@ -152,41 +156,32 @@ public class NBA_Draft_Simulator {
                         int indexOfFourthSpace = winner.substring(indexOfThirdSpace+1).indexOf(" ") + indexOfThirdSpace+1;
                         if (!goFast) isFast = keyboard.nextLine();
                         if (!goFast && isFast.equals("fast")) goFast = true;
-                        System.out.println("The first number is " + winner.substring(0,indexOfFirstSpace) + "!");
+                        System.out.println("The first number is " + winner.substring(0,indexOfFirstSpace));
                         System.out.println("These " + findPossibleWinners(Arrays.copyOfRange(sortedWinner,0,1),1).size() + " teams could still win! - " + findPossibleWinners(Arrays.copyOfRange(sortedWinner,0,1),1));
                         if (!goFast) isFast = keyboard.nextLine();
                         if (!goFast && isFast.equals("fast")) goFast = true;
-                        System.out.println("The second number is " + winner.substring(indexOfFirstSpace+1,indexOfSecondSpace) + "!");
+                        System.out.println("The second number is " + winner.substring(indexOfFirstSpace+1,indexOfSecondSpace));
                         System.out.println("These " + findPossibleWinners(Arrays.copyOfRange(sortedWinner,0,2),2).size() + " teams could still win! - " + findPossibleWinners(Arrays.copyOfRange(sortedWinner,0,2),2));
                         if (!goFast) isFast = keyboard.nextLine();
                         if (!goFast && isFast.equals("fast")) goFast = true;
-                        System.out.println("The third number is " + winner.substring(indexOfSecondSpace+1,indexOfThirdSpace) + "!");
+                        System.out.println("The third number is " + winner.substring(indexOfSecondSpace+1,indexOfThirdSpace));
                         System.out.println("These " + findPossibleWinners(Arrays.copyOfRange(sortedWinner,0,3),3).size() + " teams could still win! - " + findPossibleWinners(Arrays.copyOfRange(sortedWinner,0,3),3));
                         if (!goFast) isFast = keyboard.nextLine();
                         if (!goFast && isFast.equals("fast")) goFast = true;
-                        System.out.println("The fourth number is " + winner.substring(indexOfFourthSpace+1) + "!");
+                        System.out.println("The fourth number is " + winner.substring(indexOfFourthSpace+1));
                         break;
                     }
                 }
             }
         }
-        switch(indexOfWinner){
-            case 0: teamsTickets.set(0,empty); worstTeams[0] = " "; return AworstTeams[0];
-            case 1: teamsTickets.set(1,empty); worstTeams[1] = " "; return AworstTeams[1];
-            case 2: teamsTickets.set(2,empty); worstTeams[2] = " "; return AworstTeams[2];
-            case 3: teamsTickets.set(3,empty); worstTeams[3] = " "; return AworstTeams[3];
-            case 4: teamsTickets.set(4,empty); worstTeams[4] = " "; return AworstTeams[4];
-            case 5: teamsTickets.set(5,empty); worstTeams[5] = " "; return AworstTeams[5];
-            case 6: teamsTickets.set(6,empty); worstTeams[6] = " "; return AworstTeams[6];
-            case 7: teamsTickets.set(7,empty); worstTeams[7] = " "; return AworstTeams[7];
-            case 8: teamsTickets.set(8,empty); worstTeams[8] = " "; return AworstTeams[8];
-            case 9: teamsTickets.set(9,empty); worstTeams[9] = " "; return AworstTeams[9];
-            case 10: teamsTickets.set(10,empty); worstTeams[10] = " "; return AworstTeams[10];
-            case 11: teamsTickets.set(11,empty); worstTeams[11] = " "; return AworstTeams[11];
-            case 12: teamsTickets.set(12,empty); worstTeams[12] = " "; return AworstTeams[12];
-            case 13: teamsTickets.set(13,empty); worstTeams[13] = " "; return AworstTeams[13];
-            default: return indexOfWinner + "";
+        for (int i = 0; i<winners.size();i++){
+            if(winners.get(i).equals(worstTeams[indexOfWinner])) {
+                System.out.println("The " + worstTeams[indexOfWinner] + " won but since they have already won, this pick will be redone.");
+                return findLotteryWinners();
+            }
         }
+        winners.add(worstTeams[indexOfWinner]);
+        return AworstTeams[indexOfWinner];
     }
     public static void findOtherWinners(){
         for(int i=0;i< worstTeams.length;i++){
@@ -201,46 +196,34 @@ public class NBA_Draft_Simulator {
         Scanner keyboard = new Scanner(System.in);
         System.out.println("Welcome to the lottery in the NBA 2022 Draft" + "\n");
         System.out.println("Type \"fast\" to speed up the simulation");
-        if (!goFast) isFast = keyboard.nextLine();
-        if (!goFast && isFast.equals("fast")) goFast = true;
+        userInput();
         System.out.println("The burnt ticket was " + allTickets.get(0));
         System.out.println("Pick number 1 goes to the " + findLotteryWinners());
         System.out.println("Pick number 2 goes to the " + findLotteryWinners());
         System.out.println("Pick number 3 goes to the " + findLotteryWinners());
         System.out.println("Pick number 4 goes to the " + findLotteryWinners());
         findOtherWinners();
-        if (!goFast) isFast = keyboard.nextLine();
-        if (!goFast && isFast.equals("fast")) goFast = true;
+        userInput();
         System.out.println("Pick number 5 goes to the " + lotteryLosers.get(0));
-        if (!goFast) isFast = keyboard.nextLine();
-        if (!goFast && isFast.equals("fast")) goFast = true;
+        userInput();
         System.out.println("Pick number 6 goes to the " + lotteryLosers.get(1));
-        if (!goFast) isFast = keyboard.nextLine();
-        if (!goFast && isFast.equals("fast")) goFast = true;
+        userInput();
         System.out.println("Pick number 7 goes to the " + lotteryLosers.get(2));
-        if (!goFast) isFast = keyboard.nextLine();
-        if (!goFast && isFast.equals("fast")) goFast = true;
+        userInput();
         System.out.println("Pick number 8 goes to the " + lotteryLosers.get(3));
-        if (!goFast) isFast = keyboard.nextLine();
-        if (!goFast && isFast.equals("fast")) goFast = true;
+        userInput();
         System.out.println("Pick number 9 goes to the " + lotteryLosers.get(4));
-        if (!goFast) isFast = keyboard.nextLine();
-        if (!goFast && isFast.equals("fast")) goFast = true;
+        userInput();
         System.out.println("Pick number 10 goes to the " + lotteryLosers.get(5));
-        if (!goFast) isFast = keyboard.nextLine();
-        if (!goFast && isFast.equals("fast")) goFast = true;
+        userInput();
         System.out.println("Pick number 11 goes to the " + lotteryLosers.get(6));
-        if (!goFast) isFast = keyboard.nextLine();
-        if (!goFast && isFast.equals("fast")) goFast = true;
+        userInput();
         System.out.println("Pick number 12 goes to the " + lotteryLosers.get(7));
-        if (!goFast) isFast = keyboard.nextLine();
-        if (!goFast && isFast.equals("fast")) goFast = true;
+        userInput();
         System.out.println("Pick number 13 goes to the " + lotteryLosers.get(8));
-        if (!goFast) isFast = keyboard.nextLine();
-        if (!goFast && isFast.equals("fast")) goFast = true;
+        userInput();
         System.out.println("Pick number 14 goes to the " + lotteryLosers.get(9));
-        if (!goFast) isFast = keyboard.nextLine();
-        if (!goFast && isFast.equals("fast")) goFast = true;
+        userInput();
     }
     public static ArrayList<String> findPossibleWinners(int[] balls, int whichTime){
         ArrayList<String> possibleWinners = new ArrayList<>();
@@ -310,6 +293,7 @@ public class NBA_Draft_Simulator {
         try {
             Writer fileWriter = new FileWriter(filePath, true);
             printWriter = new PrintWriter(fileWriter);
+            printWriter.println("The burnt ticket is " + allTickets);
 
             for (String line : lines) {
                 printWriter.write(line);
@@ -325,5 +309,10 @@ public class NBA_Draft_Simulator {
                 printWriter.close();
             }
         }
+    }
+    public static void userInput(){
+        Scanner keyboard = new Scanner(System.in);
+        if (!goFast) isFast = keyboard.nextLine();
+        if (!goFast && isFast.equals("fast")) goFast = true;
     }
 }

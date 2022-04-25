@@ -1,14 +1,28 @@
 Houston Rockets
+140
 Orlando Magic
+140
 Detroit Pistons
+140
 Oklahoma City Thunder
+115
 Indiana Pacers
+115
 Portland Trail Blazers
+90
 Sacramento Kings
+75
 Los Angeles Lakers
+45
 San Antonio Spurs
+45
 Washington Wizards
+45
 New York Knicks
+18
 New Orleans Pelicans
+17
 LA Clippers
+10
 Charlotte Hornets
+5
