@@ -3,50 +3,28 @@ import java.util.*;
 // separate logic and prints,
 public class NBA_Draft_Simulator {
     private static ArrayList<String> allTickets;
-    private static ArrayList<String> empty;
     private static ArrayList<ArrayList<String>> teamsTickets;
     private static String[] worstTeams;
     private static String[] AworstTeams;
     private static ArrayList<String> lotteryLosers;
     private static ArrayList<String> winners;
     private static int[] amountTickets;
-    private static double secondsToSleep;
-    private static double secondsToSleep2;
     private static boolean goFast;
     private static String isFast;
 
     public static void main(String args[]) throws IOException {
         boolean goAgain = false;
         do{
-            worstTeams = new String[]{"Houston Rockets", "Orlando Magic", "Detroit Pistons", "Oklahoma City Thunder", "Indiana Pacers", "Portland Trail Blazers", "Sacramento Kings", "Los Angeles Lakers", "San Antonio Spurs", "Washington Wizards", "New York Knicks", "New Orleans Pelicans", "LA Clippers", "Charlotte Hornets"};
-            amountTickets = new int[]{140,140,140,115,115,90,75,45,45,45,18,17,10,5};
-            Scanner file = new Scanner(new File("input.txt"));
-            int lines = 0;
-            while (file.hasNextLine()) {
-                worstTeams[lines] = file.nextLine();
-                amountTickets[lines] = Integer.parseInt(file.nextLine());
-                lines++;
-            }
-            allTickets = new ArrayList<>();
-            empty = new ArrayList<>();
-            teamsTickets = new ArrayList<ArrayList<String>>();
-            AworstTeams = Arrays.copyOf(worstTeams, worstTeams.length);
-            lotteryLosers = new ArrayList<>();
-            winners = new ArrayList<>();
-            secondsToSleep = 1;
-            secondsToSleep2 = 500;
-            goFast = false;
-            isFast = "";
+            setDataFromFile();
+            instantiateVariables();
             printAllWinners();
+
             Scanner keyboard = new Scanner(System.in);
             System.out.println("\n\nTo see each teams tickets look at the teamsTickets.txt file");
-            System.out.print("To run a new simulation type \"sim\" :: ");
-            if (keyboard.nextLine().equals("sim")) {
-                goAgain = true;
-            }
-            else{
-                System.out.println("Thank you for trying the NBA 2022 Draft Simulator!");
-            }
+            System.out.println("To run a new simulation type \"sim\" :: ");
+            if (keyboard.nextLine().equals("sim")) { goAgain = true; }
+            else { System.out.println("Thank you for trying the NBA 2022 Draft Simulator!"); }
+
         } while (goAgain);
 
     }
@@ -62,7 +40,6 @@ public class NBA_Draft_Simulator {
                 }
             }
         }
-// change order of each number here
         Random rand = new Random();
         for (int i = 0; i<allTickets.size();i++){
             String newTicket = "";
@@ -83,7 +60,6 @@ public class NBA_Draft_Simulator {
         for(int j = 0; j<=13;j++) {
             teamsTickets.add(new ArrayList<>());
         }
-        //System.out.println(allTickets);
         while (allTickets.size() > 1){
             int whichTicketIndex = (int) (Math.random()*allTickets.size());
             int whichTeamIndex =  (int) (Math.random()*teamsTickets.size());
@@ -95,10 +71,8 @@ public class NBA_Draft_Simulator {
     }
     public static int[] quick_sort(int intArray[], int low, int high) {
         if (low < high) {
-            //partition the array around pi=>partitioning index and return pi
             int pi = partition(intArray, low, high);
 
-            // sort each partition recursively
             quick_sort(intArray, low, pi-1);
             quick_sort(intArray, pi+1, high);
         }
@@ -106,19 +80,17 @@ public class NBA_Draft_Simulator {
     }
     public static int partition(int intArray[], int low, int high) {
         int pi = intArray[high];
-        int i = (low-1); // smaller element index
+        int i = (low-1);
         for (int j=low; j<high; j++) {
-            // check if current element is less than or equal to pi
             if (intArray[j] <= pi) {
                 i++;
-                // swap intArray[i] and intArray[j]
                 int temp = intArray[i];
                 intArray[i] = intArray[j];
                 intArray[j] = temp;
             }
         }
 
-        // swap intArray[i+1] and intArray[high] (or pi)
+
         int temp = intArray[i+1];
         intArray[i+1] = intArray[high];
         intArray[high] = temp;
@@ -128,7 +100,6 @@ public class NBA_Draft_Simulator {
     public static String findLotteryWinners(){
         int indexOfWinner = -1;
         boolean winnerFound = false;
-        Scanner keyboard = new Scanner(System.in);
         while (!winnerFound) {
             String winner = (int) (Math.random() * 13 + 1) + " " + (int) (Math.random() * 13 + 1) + " " + (int) (Math.random() * 13 + 1) + " " + (int) (Math.random() * 13 + 1);
             for (int i = 0; i < teamsTickets.size(); i++) {
@@ -154,20 +125,16 @@ public class NBA_Draft_Simulator {
                         int indexOfSecondSpace = winner.substring(indexOfFirstSpace+1).indexOf(" ") + indexOfFirstSpace+1;
                         int indexOfThirdSpace = winner.substring(indexOfSecondSpace+1).indexOf(" ") + indexOfSecondSpace+1;
                         int indexOfFourthSpace = winner.substring(indexOfThirdSpace+1).indexOf(" ") + indexOfThirdSpace+1;
-                        if (!goFast) isFast = keyboard.nextLine();
-                        if (!goFast && isFast.equals("fast")) goFast = true;
+                        userInput();
                         System.out.println("The first number is " + winner.substring(0,indexOfFirstSpace));
                         System.out.println("These " + findPossibleWinners(Arrays.copyOfRange(sortedWinner,0,1),1).size() + " teams could still win! - " + findPossibleWinners(Arrays.copyOfRange(sortedWinner,0,1),1));
-                        if (!goFast) isFast = keyboard.nextLine();
-                        if (!goFast && isFast.equals("fast")) goFast = true;
+                        userInput();
                         System.out.println("The second number is " + winner.substring(indexOfFirstSpace+1,indexOfSecondSpace));
                         System.out.println("These " + findPossibleWinners(Arrays.copyOfRange(sortedWinner,0,2),2).size() + " teams could still win! - " + findPossibleWinners(Arrays.copyOfRange(sortedWinner,0,2),2));
-                        if (!goFast) isFast = keyboard.nextLine();
-                        if (!goFast && isFast.equals("fast")) goFast = true;
+                        userInput();
                         System.out.println("The third number is " + winner.substring(indexOfSecondSpace+1,indexOfThirdSpace));
                         System.out.println("These " + findPossibleWinners(Arrays.copyOfRange(sortedWinner,0,3),3).size() + " teams could still win! - " + findPossibleWinners(Arrays.copyOfRange(sortedWinner,0,3),3));
-                        if (!goFast) isFast = keyboard.nextLine();
-                        if (!goFast && isFast.equals("fast")) goFast = true;
+                        userInput();
                         System.out.println("The fourth number is " + winner.substring(indexOfFourthSpace+1));
                         break;
                     }
@@ -238,7 +205,7 @@ public class NBA_Draft_Simulator {
                 sortedTicket = str.split(" ");
                 for (int o = 0; o < sortedTicket.length; o++){
                     intSortedTicket[o] = Integer.parseInt(sortedTicket[o]);
-                } // sooo {2,10,11} for {2,9,10,11} is possible winner, so make it like that smh
+                }
                 intSortedTicket = quick_sort(intSortedTicket,0,intSortedTicket.length-1);
                 oneBallofTicketArray = Arrays.copyOfRange(intSortedTicket,0,1);
                 twoBallofTicketArray = Arrays.copyOfRange(intSortedTicket,0,2);
@@ -283,7 +250,6 @@ public class NBA_Draft_Simulator {
     }
     public static void writeTeamsTicketsFile() throws FileNotFoundException{
         String filePath = "C:\\Users\\lahiv\\Github repos\\NBA Draft Simulator\\teamsTickets.txt";
-        // Content that will be written in the file
         PrintWriter writer = new PrintWriter(filePath);
         writer.print("");
         writer.close();
@@ -297,14 +263,13 @@ public class NBA_Draft_Simulator {
 
             for (String line : lines) {
                 printWriter.write(line);
-                printWriter.write(System.getProperty("line.separator"));//The two above lines can be replaced with : printWriter.println(line);
+                printWriter.write(System.getProperty("line.separator"));
             }
         }
         catch (IOException e) {
             e.printStackTrace();
         }
         finally {
-            // Closing the file
             if (printWriter != null) {
                 printWriter.close();
             }
@@ -314,5 +279,37 @@ public class NBA_Draft_Simulator {
         Scanner keyboard = new Scanner(System.in);
         if (!goFast) isFast = keyboard.nextLine();
         if (!goFast && isFast.equals("fast")) goFast = true;
+    }
+    public static void setDataFromFile() throws FileNotFoundException{
+        worstTeams = new String[]{"Houston Rockets", "Orlando Magic", "Detroit Pistons", "Oklahoma City Thunder", "Indiana Pacers", "Portland Trail Blazers", "Sacramento Kings", "Los Angeles Lakers", "San Antonio Spurs", "Washington Wizards", "New York Knicks", "New Orleans Pelicans", "LA Clippers", "Charlotte Hornets"};
+        amountTickets = new int[]{140,140,140,115,115,90,75,45,45,45,18,17,10,5};
+        Scanner file = new Scanner(new File("input.txt"));
+        try {
+            int lines = 0;
+            while (file.hasNextLine()) {
+                worstTeams[lines] = file.nextLine();
+                amountTickets[lines] = Integer.parseInt(file.nextLine());
+                lines++;
+            }
+        }
+        catch (Exception e) {
+            System.out.println("The input file was not configured properly. This simulation will use the NBA 2022 Draft Lottery's default teams with their respective amounts of tickets. ");
+            worstTeams = new String[]{"Houston Rockets", "Orlando Magic", "Detroit Pistons", "Oklahoma City Thunder", "Indiana Pacers", "Portland Trail Blazers", "Sacramento Kings", "Los Angeles Lakers", "San Antonio Spurs", "Washington Wizards", "New York Knicks", "New Orleans Pelicans", "LA Clippers", "Charlotte Hornets"};
+            amountTickets = new int[]{140,140,140,115,115,90,75,45,45,45,18,17,10,5};
+        }
+        if (worstTeams.length!=14){
+            System.out.println("The NBA Draft Lottery has 14 teams in it, for an accurate simulation please use only 14 teams. The 14 teams in the NBA 2022 Draft Lottery will be used.");
+            worstTeams = new String[]{"Houston Rockets", "Orlando Magic", "Detroit Pistons", "Oklahoma City Thunder", "Indiana Pacers", "Portland Trail Blazers", "Sacramento Kings", "Los Angeles Lakers", "San Antonio Spurs", "Washington Wizards", "New York Knicks", "New Orleans Pelicans", "LA Clippers", "Charlotte Hornets"};
+            amountTickets = new int[]{140,140,140,115,115,90,75,45,45,45,18,17,10,5};
+        }
+    }
+    public static void instantiateVariables(){
+        allTickets = new ArrayList<>();
+        teamsTickets = new ArrayList<ArrayList<String>>();
+        AworstTeams = Arrays.copyOf(worstTeams, worstTeams.length);
+        lotteryLosers = new ArrayList<>();
+        winners = new ArrayList<>();
+        goFast = false;
+        isFast = "";
     }
 }
